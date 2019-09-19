@@ -146,6 +146,18 @@ Figure 2. The network is plotted by interaction level (direct or indirect).
 ![table](./images/table.jpg)
 
 Table 1. The function annotations of the genes in the OSH1 network.
+
+## Discussion
+
+From the gene network we obtained a list of genes potentially interacting with OSH1. The gene functions include metabolite transport (LOC_Os01g03490), signaling transduction (LOC_Os05g45420, LOC_Os01g41010, LOC_Os05g41220), and  stress response (LOC_Os12g36640). Since OSH1 is involved in the maintenance of undifferentiated status of SAM, these genes are likely involved in the relevant downstream pathways of OSH1.
+
+
+The peak selection was stract, leading to the discovery of only about a dozen genes in the network, and all these genes were upregulated by OSH1. Less strict selection would discover more genes, among which some might be downregulated, equally interesting. In fact, lowering the selection threshold to (FDR < 5% and fold enrichment > 100) generated a network of 1000+ genes (data not shown). A further GO enrichment analysis would help categorize the gene groups. Moreover, examining the binding sites of OSH1 to these genes can reveal more information about their interactions.
+
+
+In conclusion, this study built a gene regulatory network of OSH1 based the ChIP-Seq and transcriptomics data, and extracted functional annotations of the downstream genes from OSH1. Future analyses can lower the peak selection threshold to obtain a bigger network and categorize the gene functions. 
+
+
 ## References
 
 [1] Steeves, T.A., and Sussex, I.M. (1989). Patterns in Plant Development. (Cambridge, UK: Cambridge University Press)
