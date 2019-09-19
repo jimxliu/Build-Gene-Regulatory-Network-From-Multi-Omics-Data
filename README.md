@@ -21,7 +21,17 @@ The undifferentiated status of SAM is found to be maintained by Class I knotted1
 OSH1 is one of the KNOX transcription factors (TFs) in rice (Oryza sativa). OSH1 was found to regulate the signaling pathway of brassinosteroids, a group of hormones promoting differentiation in meristem cells [3]. To gather a better understanding of this KNOX gene function, I planned to run a genome-wide analysis of the OSH1 downstream pathway hoping to find a comprehensive set of target genes of OSH1 and build its gene regulatory network. 
 
 ## Workflow
+To implement the genome-wide analysis, data from ChIP-Seq and RNA-Seq were used to build the gene network (Fig.1). The ChIP-Seq experiment consisted of two samples, one from chromatin immunoprecipitation of Japonica rice Nipponbare panicle sample using OSH1 antibody, and the other from the same  using rabbit IgG as negative control. Each sample had two biological replicates. As for the RNA-Seq experiment, DNA were extracted from  the wild-type leaf tissues and from the OSH1-overexpressing leaf tissues of the same rice line. Each treatment consisted of two biological replicates. [3]
+
 ![workflow](./images/workflow.jpg)
+
+The ChIP-seq raw data ( DRA000206 and DRA000313) were quality-controlled by FastQC, and aligned to the rice genome(MSU7.0) using Bowtie. MACS software was used for peak calling. The list of the nearest genes to the significant peaks were extracted using BEDTools. The list of genes, which were the potential targets of OSH1, was used for building the gene network. 
+
+The RNA-Seq reads (DRA002287) were quality-controlled by FastQC and aligned to the rice genome (MSU7.0) using TopHat. Cufflinks was used to identify differentially expressed genes provided with a GFF3 annotation file. The output file of Cufflinks was used to build the gene network.
+
+The gene regulatory network of OSH1 was generated using GeneNetworkBuilder (Bioconductor R),inputting the bound list identified by ChIP-Seq and the gene expression result. 
+
+Additional scripts were written to format data in transition from one software to another, 
 
 ## Data Analysis
 
