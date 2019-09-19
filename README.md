@@ -45,22 +45,28 @@ Programming languages: **Perl**, **R**, **Bash**.
 Add all the bioinformatics tools to the class path, so they can be used without typing the full path.
 
 ### ChIP-Seq Analysis
-- Set working directory to the root directory of this repository.
-- Indexing the genome:
+1. Set working directory to the root directory of this repository.
+2. Indexing the genome:
+
 `$ bowtie2-build genome/rice_genome.fa genome/rice_genome`
 
-- Aligning the reads and output as .sam: 
-`$ bowtie2 -x rice_genome -1 osh1_1.fastq.bz2 -2 osh1_2.fastq.bz2 -S chipseq/osh1.sam`
-`$ bowtie2 -x rice_genome -1 ctrl_1.fastq.bz2 -2 ctrl_2.fastq.bz2 -S chipseq/ctrl.sam`
-(No replicate, otherwise too much time consumption)
+3. Aligning the reads and output as .sam: 
 
-- Run MACS analysis using .sam as input files.
+```
+$ bowtie2 -x rice_genome -1 osh1_1.fastq.bz2 -2 osh1_2.fastq.bz2 -S chipseq/osh1.sam
+$ bowtie2 -x rice_genome -1 ctrl_1.fastq.bz2 -2 ctrl_2.fastq.bz2 -S chipseq/ctrl.sam
+(No replicate, otherwise too much time consumption)
+```
+
+4. Run MACS analysis using .sam as input files.
+
 `$ macs14 -t chipseq/osh1.sam -c chipseq/ctrl.sam -f SAM -g 3.73e8 -n chipseq/chipseq`
 
-- Select peaks with FDR < 1% and fold-enrichment > 120
+5. Select peaks with FDR < 1% and fold-enrichment > 120
+
 `$ chipseq/filter.pl`
 
-- BEDTool select the closest genes to the peaks:
+6. BEDTool select the closest genes to the peaks:
 First, extract just gene annotations from all.gff3 file
 $ awk '{if($3 ~ /gene/) print $0}' genome/all.gff3 > genome/genes.gff3
 Then sort the bed files because “bedtools closest” requires that all input files are presorted data by chromosome and then by start position (e.g., sort -k1,1 -k2,2n in.bed > in.sorted.bed for BED files).
