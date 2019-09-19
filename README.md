@@ -135,7 +135,17 @@ Remove `./data` folder
 
 ## Results
 
+![image1](./images/image1.jpg)
 
+Figure 1. The OSH1-related genes interaction network. LOC_Os0351690 (center) is the ID of OSH1.
+
+![image2](./images/image2.jpg)
+
+Figure 2. The network is plotted by interaction level (direct or indirect).
+
+![table](./images/table.jpg)
+
+Table 1. The function annotations of the genes in the OSH1 network.
 ## References
 
 [1] Steeves, T.A., and Sussex, I.M. (1989). Patterns in Plant Development. (Cambridge, UK: Cambridge University Press)
