@@ -15,7 +15,7 @@
 ## Introduction
 In contrast to animals that have completed their organ formation before birth, the plants continue to produce organs throughout their life cycle. The continuous formation of organs is very important to the plant development and growth; therefore understanding such feature can potentially improve the yield in many crop plants and benefit agriculture and food industry. 
 
-	Shoot apical meristem (SAM) is responsible for the continous growth of plant organs. It 
+Shoot apical meristem (SAM) is responsible for the continous growth of plant organs. It 
 is a region in a growing shoot consisting of self-renewing stem cells that can be transitioned into different specialized cell types such as leaf and flower cells, therefore playing an important part in the formation of aboveground organs/tissues [1]. 
 
 The undifferentiated status of SAM is found to be maintained by Class I knotted1-like homeobox (KNOX) transcription factors. Studies have show that KNOX genes are specifically expressed in SAM, and the overexpression of KNOX in leaves would affect the leaf growth pattern while loss of KNOX genes would result in failure of SAM formation and maintenance[2]. KNOW were also found to be involved in regulating growth-promoting hormone cytokinin biosynthesis, as well as in regulating biosynthesis of cell wall components such as lignin and gibberellin [2]. Yet, we have not completely understood how the KNOX genes contribute to the maintenance of indeterminacy of SAM.
@@ -149,7 +149,7 @@ Table 1. The function annotations of the genes in the OSH1 network.
 
 ## Discussion
 
-From the gene network we obtained a list of genes potentially interacting with OSH1. The gene functions include metabolite transport (LOC_Os01g03490), signaling transduction (LOC_Os05g45420, LOC_Os01g41010, LOC_Os05g41220), and  stress response (LOC_Os12g36640). Since OSH1 is involved in the maintenance of undifferentiated status of SAM, these genes are likely involved in the relevant downstream pathways of OSH1.
+From the gene network we obtained a list of genes potentially interacting with OSH1. The gene functions include metabolite transport (LOC_Os01g03490), signaling transduction (LOC_Os05g45420, OC_Os01g41010, LOC_Os05g41220), and  stress response (LOC_Os12g36640). Since OSH1 is involved in the maintenance of undifferentiated status of SAM, these genes are likely involved in the relevant downstream pathways of OSH1.
 
 
 The peak selection was stract, leading to the discovery of only about a dozen genes in the network, and all these genes were upregulated by OSH1. Less strict selection would discover more genes, among which some might be downregulated, equally interesting. In fact, lowering the selection threshold to (FDR < 5% and fold enrichment > 100) generated a network of 1000+ genes (data not shown). A further GO enrichment analysis would help categorize the gene groups. Moreover, examining the binding sites of OSH1 to these genes can reveal more information about their interactions.
