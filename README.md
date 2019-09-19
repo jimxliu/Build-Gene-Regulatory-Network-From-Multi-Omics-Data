@@ -8,6 +8,7 @@
     * [ChIP-Seq Analysis](#chip-seq-analysis)
     * [RNA-Seq Analysis](#rna-seq-analysis)
     * [Build Gene Network](#build-gene-network)
+    * [Cleanup](#cleanup)
 4. [Results](#results)
 5. [References](#references)
 
@@ -99,31 +100,38 @@ $ cuffdiff -o ./data/cuffdiff_out ./data/transcriptome/all_transcripts.gff wt_re
 $ grep -i yes ./data/cuffdiff_out/gene_exp.diff > gene_exp_significant.diff
 ```
 ### Build Gene Network
-1. Set working directory to ./geneNetwork
 
-2. Copy results of ChIP-Seq and RNA-Seq analyses to the current directory:
+1. Copy results of ChIP-Seq and RNA-Seq analyses to the current directory:
 ```
-$ cp ../chipseq/nearest.out .
-$ cp ../cuffdiff_out/gene_exp_significant.diff
+$ cp ./data/chipseq/nearest.out .
+$ cp ./data/cuffdiff_out/gene_exp_significant.diff
 ```
 
-3. Create the input of  OSH1-binding list, “bind_list.csv”, using the list of nearest genes to the peaks: 
-$ create_bind_list.pl nearest.out
+2. Create the input of  OSH1-binding list, “bind_list.csv”, using the list of nearest genes to the peaks: 
+```
+$ /code/geneNetwork/create_bind_list.pl nearest.out
+```
 
-- Create the input of the differential expression data, “exprdata.csv”, and remove infinite number:
+3. Create the input of the differential expression data, “exprdata.csv”, and remove infinite number:
+```
 $ create_expr_input.pl gene_exp_significant.diff
 $ grep -v -i inf exprdata.csv > exprdata_temp.csv
 $ mv exprdata_temp.csv exprdata.csv
+```
 
-- Create dummy miRNA.map (not used, just beacuse it is GeneNetworkBuilder requirement)
-- Use experimentally verified protein-protein interactions from
-http://bis.zju.edu.cn/prin/download.do
+4. Create dummy miRNA.map (not used, just beacuse it is GeneNetworkBuilder requirement)
+5. Use experimentally verified protein-protein interactions from [here](http://bis.zju.edu.cn/prin/download.do)
 
-- Run the osh1_network.R (See “Results” section for the plots)
+6. Run the osh1_network.R (See “Results” section for the plots)
 
-- Extract function annotations of the downstream genes in the network:
-$ perl extract_targets.pl cifNetwork.csv ../genome/genes.gff3
+7. Extract function annotations of the downstream genes in the network:
+```
+$ perl ./code/geneNetwork/extract_targets.pl cifNetwork.csv ./data/genome/genes.gff3
+```
 
+### Cleanup
+
+Remove `./data` folder
 
 ## Results
 
