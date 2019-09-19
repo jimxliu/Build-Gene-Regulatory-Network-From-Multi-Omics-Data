@@ -38,7 +38,7 @@ Additional scripts were written to format data in transition from one software t
 
 ### Bioinformatics Tools
 
-Tools: **Bowtie**, **Macs14**, **Bedtools**,**
+Tools: **bowtie2**, **macs14**, **bedtools**,**tophat2**.
 
 Programming languages: **Perl**, **R**, **Bash**. 
 
@@ -48,37 +48,81 @@ Add all the bioinformatics tools to the class path, so they can be used without 
 1. Set working directory to the root directory of this repository.
 2. Indexing the genome:
 
-`$ bowtie2-build genome/rice_genome.fa genome/rice_genome`
+`$ bowtie2-build ./data/genome/rice_genome.fa genome/rice_genome`
 
 3. Aligning the reads and output as .sam: 
 
 ```
 $ bowtie2 -x rice_genome -1 osh1_1.fastq.bz2 -2 osh1_2.fastq.bz2 -S chipseq/osh1.sam
 $ bowtie2 -x rice_genome -1 ctrl_1.fastq.bz2 -2 ctrl_2.fastq.bz2 -S chipseq/ctrl.sam
-(No replicate, otherwise too much time consumption)
+# No replicate, otherwise too much time consumption
 ```
 
 4. Run MACS analysis using .sam as input files.
 
-`$ macs14 -t chipseq/osh1.sam -c chipseq/ctrl.sam -f SAM -g 3.73e8 -n chipseq/chipseq`
+`$ macs14 -t ./data/chipseq/osh1.sam -c chipseq/ctrl.sam -f SAM -g 3.73e8 -n chipseq/chipseq`
 
 5. Select peaks with FDR < 1% and fold-enrichment > 120
 
-`$ chipseq/filter.pl`
+`$ ./code/chipseq/filter.pl`
 
 6. BEDTool select the closest genes to the peaks:
-First, extract just gene annotations from all.gff3 file
-$ awk '{if($3 ~ /gene/) print $0}' genome/all.gff3 > genome/genes.gff3
-Then sort the bed files because “bedtools closest” requires that all input files are presorted data by chromosome and then by start position (e.g., sort -k1,1 -k2,2n in.bed > in.sorted.bed for BED files).
-$ sort -k 1,1 -k 2,2n chipseq/chipseq_peaks_filtered.bed > chipseq/sorted_peaks.bed
-$ sort -k 1,1 -k 4,4n genome/genes.gff3 > genome/sorted_genes.gff3
-Then use “bedtools closest”
-$ ~/bedtools2/bin/bedtools closest -io -a chipseq/sorted_peaks.bed -b genome/sorted_genes.gff3 > chipseq/nearest.out
+```
+#First, extract just gene annotations from all.gff3 file
+$ awk '{if($3 ~ /gene/) print $0}' ./data/genome/all.gff3 > ./data/genome/genes.gff3
+#Then sort the bed files because “bedtools closest” requires that all input files are presorted data by chromosome and then by start position (e.g., sort -k1,1 -k2,2n in.bed > in.sorted.bed for BED files).
+$ sort -k 1,1 -k 2,2n ./data/chipseq/chipseq_peaks_filtered.bed > ./data/chipseq/sorted_peaks.bed
+$ sort -k 1,1 -k 4,4n ./data/genome/genes.gff3 > ./data/genome/sorted_genes.gff3
+# Then use “bedtools closest”
+$ bedtools closest -io -a ./data/chipseq/sorted_peaks.bed -b ./data/genome/sorted_genes.gff3 > ./data/chipseq/nearest.out
+```
 
 ### RNA-Seq Analysis
+1. Index transcriptome:
 
+`$ tophat2 -G ./data/genome/all.gff3 --transcriptome-index=./data/transcriptome/all_transcripts genome/rice_genome`
 
+2. Tophat alignment:
+```
+$ tophat2 --transcriptome-index=./data/transcriptome/all_transcripts --library-type fr-secondstrand ./data/genome/rice_genome wt_rep1.fastq
+$ tophat2 --transcriptome-index=./data/transcriptome/all_transcripts -o wt_rep2 -p6 --library-type fr-secondstrand ./data/genome/rice_genome wt_rep2.fastq
+$ tophat2 --transcriptome-index=./data/transcriptome/all_transcripts -o osh1_rep1 -p6 --library-type fr-secondstrand ./data/genome/rice_genome osh1_rep1.fastq
+$ tophat2 --transcriptome-index=./data/transcriptome/all_transcripts -o osh1_rep2 -p6 --library-type fr-secondstrand ./data/genome/rice_genome osh1_rep2.fastq
+```
+
+3. Cuffdiff to calculate differential gene expression:
+```
+$ cuffdiff -o ./data/cuffdiff_out ./data/transcriptome/all_transcripts.gff wt_rep1/accepted_hits.bam,wt_rep2/accepted_hits.bam osh1_rep1/accepted_hits.bam,osh1_rep2/accepted_hits.bam
+```
+4. Keep only the significantly differential expressions:
+```
+$ grep -i yes ./data/cuffdiff_out/gene_exp.diff > gene_exp_significant.diff
+```
 ### Build Gene Network
+1. Set working directory to ./geneNetwork
+
+2. Copy results of ChIP-Seq and RNA-Seq analyses to the current directory:
+```
+$ cp ../chipseq/nearest.out .
+$ cp ../cuffdiff_out/gene_exp_significant.diff
+```
+
+3. Create the input of  OSH1-binding list, “bind_list.csv”, using the list of nearest genes to the peaks: 
+$ create_bind_list.pl nearest.out
+
+- Create the input of the differential expression data, “exprdata.csv”, and remove infinite number:
+$ create_expr_input.pl gene_exp_significant.diff
+$ grep -v -i inf exprdata.csv > exprdata_temp.csv
+$ mv exprdata_temp.csv exprdata.csv
+
+- Create dummy miRNA.map (not used, just beacuse it is GeneNetworkBuilder requirement)
+- Use experimentally verified protein-protein interactions from
+http://bis.zju.edu.cn/prin/download.do
+
+- Run the osh1_network.R (See “Results” section for the plots)
+
+- Extract function annotations of the downstream genes in the network:
+$ perl extract_targets.pl cifNetwork.csv ../genome/genes.gff3
 
 
 ## Results
