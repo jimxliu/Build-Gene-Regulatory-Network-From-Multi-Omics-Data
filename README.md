@@ -39,7 +39,7 @@ Additional scripts were written to format data in transition from one software t
 
 ### Bioinformatics Tools
 
-Tools: **bowtie2**, **macs14**, **bedtools**,**tophat2**.
+Tools: **bowtie2**, **macs14**, **bedtools**,**tophat2**, **cuffdiff**.
 
 Programming languages: **Perl**, **R**, **Bash**. 
 
